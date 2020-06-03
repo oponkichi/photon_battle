@@ -21,7 +21,8 @@ namespace PunBattle
             base.ActivateMenu();
 
             playerName = PlayerPrefs.GetString(KeyPlayerName);
-            inputPlayerName.text = playerName;
+            inputPlayerName.text = playerName; 
+            PhotonNetwork.NickName = playerName;
         }
 
         // Update is called once per frame
@@ -42,6 +43,7 @@ namespace PunBattle
             playerName = inputPlayerName.text;
             PlayerPrefs.SetString(KeyPlayerName, playerName);
             Debug.Log("PlayerName updated : " + playerName, this);
+            PhotonNetwork.NickName = playerName;
         }
     }
 

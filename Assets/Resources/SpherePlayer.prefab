@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6176763397388459705}
   - component: {fileID: 6176763397388459704}
   - component: {fileID: 6176763397388459711}
-  - component: {fileID: 6176763397388459710}
   - component: {fileID: 6176763397388459709}
   - component: {fileID: 1577341408}
+  - component: {fileID: 5426279558424846785}
   m_Layer: 0
   m_Name: SpherePlayer
   m_TagString: Untagged
@@ -116,25 +116,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 6176763397388459709}
-  - {fileID: 6176763397388459710}
+  - {fileID: 5426279558424846785}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6176763397388459710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6176763397388459708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
 --- !u!114 &6176763397388459709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 500
+  statuUIPrbfab: {fileID: 1234491412956854366, guid: a468d696f34d95c4caf157c481c061a5,
+    type: 3}
 --- !u!54 &1577341408
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -164,3 +151,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5426279558424846785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176763397388459708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3

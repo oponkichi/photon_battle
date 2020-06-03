@@ -9,9 +9,12 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     [SerializeField]
     float speed = 5.0f;
 
+    [SerializeField]
+    GameObject statuUIPrbfab;
 
     Rigidbody mRigidbody;
     PlayerCamera mCamera;
+    UIPlayerStatus mStatusUI;
 
 
     bool IsMine()
@@ -24,6 +27,11 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     {
         mRigidbody = GetComponent<Rigidbody>();
 
+        var uiObj = Instantiate(statuUIPrbfab);
+        mStatusUI = uiObj.GetComponent<UIPlayerStatus>();
+        mStatusUI.SetPlayer(this);
+        mStatusUI.transform.parent = InGameManager.instance.UICanvas.transform;
+
         if (!IsMine())
         {
             return;
@@ -31,6 +39,8 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
         mCamera = FindObjectOfType<PlayerCamera>();
         mCamera.target = gameObject;
+
+
 
     }
 
