@@ -13,12 +13,18 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     Rigidbody mRigidbody;
     PlayerCamera mCamera;
 
+
+    bool IsMine()
+    {
+        return !PhotonNetwork.IsConnected || photonView.IsMine;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         mRigidbody = GetComponent<Rigidbody>();
 
-        if (!photonView.IsMine)
+        if (!IsMine())
         {
             return;
         }
@@ -31,7 +37,7 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if(!photonView.IsMine)
+        if(!IsMine())
         {
             return;
         }
@@ -68,7 +74,7 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
             var accel2 = fwd * accel.z + right * accel.x;
 
-            mRigidbody.AddForce(accel2, ForceMode.Acceleration);
+            mRigidbody.AddForce(accel2 * Time.deltaTime, ForceMode.Acceleration);
         }
     }
 
