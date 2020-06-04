@@ -24,6 +24,8 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     float speed = 5.0f;
     [SerializeField]
     float attackPower = 500.0f;
+    [SerializeField]
+    GameObject obstaclePrefab = null;
 
     [SerializeField]
     GameObject statuUIPrbfab = null;
@@ -85,8 +87,24 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
     }
 
+
+
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
+    {
+        if (obstaclePrefab)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                var pos = transform.position;
+                pos.y += 2.0f;
+                InGameManager.instance.InstantiateObject(obstaclePrefab, pos, Quaternion.identity);
+            }
+        }
+    }
+
+
+        void FixedUpdate()
     {
         if(!IsMine())
         {

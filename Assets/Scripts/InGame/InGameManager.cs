@@ -30,15 +30,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0, 0, 0), Quaternion.identity);
-        }
-        else
-        {
-            //for test
-            GameObject.Instantiate(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        }
+        InstantiateObject(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -47,6 +39,19 @@ public class InGameManager : MonoBehaviourPunCallbacks
         
     }
 
+
+    public void InstantiateObject(GameObject prefab, Vector3 pos, Quaternion rotation)
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Instantiate(prefab.name, pos, rotation);
+        }
+        else
+        {
+            //for test
+            GameObject.Instantiate(prefab, pos, rotation);
+        }
+    }
 
     public void ExitGame()
     {
