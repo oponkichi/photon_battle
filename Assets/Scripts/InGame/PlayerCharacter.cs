@@ -45,7 +45,7 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(!IsMine())
         {
@@ -86,7 +86,14 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
             mRigidbody.AddForce(accel2 * Time.deltaTime, ForceMode.Acceleration);
         }
+
+        foreach(var info in mCollisionInfos)
+        {
+            mRigidbody.AddForceAtPosition(info.impluseDirection * info.impluseStrength, info.implusePos);
+        }
+        mCollisionInfos.Clear();
     }
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -98,5 +105,71 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
         {
 
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        var me = (photonView.Owner != null) ? photonView.Owner.NickName : gameObject.name;
+
+        var otherPun = collision.gameObject.GetComponent<MonoBehaviourPun>();
+        var otherPlayer = collision.gameObject.GetComponent<PlayerCharacter>();
+        var otherOwner = otherPun?.photonView.Owner;
+        var him = (otherOwner != null) ? otherOwner.NickName : gameObject.name;
+        Debug.Log("Colloded object :" + me + ", collider : " + him);
+
+        if (!IsMine())
+        {
+            return;
+        }
+
+        //ここでForceを与えるのではなく、相手側にRPCを送信してそこで飛んでもらう
+        var contact = collision.contacts[0];
+        var impluseStrength = 100.0f;
+
+        if (otherPlayer && otherOwner != null)
+        {
+            Debug.Log("Sent RPC_OnCollidedEventFromOtherPlayer", this);
+            photonView.RPC("RPC_OnCollidedEventFromOtherPlayer", otherOwner, impluseStrength, contact.normal * -1.0f, contact.point);
+            photonView.RPC("RPC_OnCollidedEventFromOtherPlayer", photonView.Owner, impluseStrength, contact.normal, contact.point);
+        }
+        else
+        {
+            var tgtRb = collision.collider.GetComponent<Rigidbody>();
+            if (tgtRb)
+            {
+                tgtRb.AddForceAtPosition(contact.normal * -impluseStrength, contact.point);
+            }
+        }
+    }
+
+    struct CollisionInfo
+    {
+        public float impluseStrength;
+        public Vector3 impluseDirection;
+        public Vector3 implusePos;
+
+        public CollisionInfo(float impluseStrength, Vector3 impluseDirection, Vector3 implusePos)
+        {
+            this.impluseStrength = impluseStrength;
+            this.impluseDirection = impluseDirection;
+            this.implusePos = implusePos;
+        }
+    }
+    List<CollisionInfo> mCollisionInfos = new List<CollisionInfo>();
+
+
+    [PunRPC]
+    private void RPC_OnCollidedEventFromOtherPlayer(float impluseStrength, Vector3 impluseDirection, Vector3 implusePos)
+    {
+        if (!IsMine())
+        {
+            return;
+        }
+
+        Debug.Log("RPC_OnCollidedEventFromOtherPlayer", this);
+        //mRigidbody.AddForceAtPosition(impluseDirection * impluseStrength, implusePos);
+
+        mCollisionInfos.Add(new CollisionInfo(impluseStrength, impluseDirection, implusePos));
+
     }
 }
