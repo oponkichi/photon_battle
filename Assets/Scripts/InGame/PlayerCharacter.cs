@@ -22,6 +22,8 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
     [SerializeField]
     float speed = 5.0f;
+    [SerializeField]
+    float attackPower = 500.0f;
 
     [SerializeField]
     GameObject statuUIPrbfab = null;
@@ -91,6 +93,7 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
             return;
         }
 
+# region 入力の処理
         Vector3 accel = new Vector3();
         if (IsButtonDOwn(Button.UP))
         {
@@ -125,14 +128,17 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
             mRigidbody.AddForce(accel2 * Time.deltaTime, ForceMode.Acceleration);
         }
+#endregion
 
-        foreach(var info in mCollisionInfos)
+# region 他プレイヤーとの衝突の処理
+        foreach (var info in mCollisionInfos)
         {
             mRigidbody.AddForceAtPosition(info.impluseDirection * info.impluseStrength, info.implusePos);
         }
         mCollisionInfos.Clear();
+#endregion
 
-
+        //落ちたら死ぬ
         if(transform.position.y < -50.0f)
         {
             InGameManager.instance.ExitGame();
@@ -178,7 +184,7 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
         //ここでForceを与えるのではなく、相手側にRPCを送信してそこで飛んでもらう
         var contact = collision.contacts[0];
-        var impluseStrength = 100.0f;
+        var impluseStrength = attackPower;
 
         if (otherPlayer && otherOwner != null)
         {

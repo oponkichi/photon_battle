@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 500
+  attackPower: 500
   statuUIPrbfab: {fileID: 1234491412956854366, guid: a468d696f34d95c4caf157c481c061a5,
     type: 3}
 --- !u!54 &1577341408
