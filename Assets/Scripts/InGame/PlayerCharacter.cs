@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 {
-    struct CollisionInfo
+    public struct CollisionInfo
     {
         public float impluseStrength;
         public Vector3 impluseDirection;
@@ -34,6 +34,10 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     PlayerCamera mCamera;
     UIPlayerStatus mStatusUI;
     List<CollisionInfo> mCollisionInfos = new List<CollisionInfo>();
+
+    float mElapsedTimeFromSpawn = 0.0f;
+
+    public float ElapsedTimeFromSpawn => mElapsedTimeFromSpawn;
 
     enum Button
     {
@@ -92,19 +96,24 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if (obstaclePrefab)
+        if (IsMine())
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (obstaclePrefab)
             {
-                var pos = transform.position;
-                pos.y += 2.0f;
-                InGameManager.instance.InstantiateObject(obstaclePrefab, pos, Quaternion.identity);
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    var pos = transform.position;
+                    pos.y += 2.0f;
+                    InGameManager.instance.InstantiateObject(obstaclePrefab, pos, Quaternion.identity);
+                }
             }
+
+            mElapsedTimeFromSpawn += Time.deltaTime;
         }
     }
 
 
-        void FixedUpdate()
+    void FixedUpdate()
     {
         if(!IsMine())
         {
@@ -177,11 +186,11 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     {
         if(stream.IsWriting)
         {
-
+            stream.SendNext(mElapsedTimeFromSpawn);
         }
         else
         {
-
+            mElapsedTimeFromSpawn = (float)stream.ReceiveNext();
         }
     }
 
@@ -191,6 +200,7 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
         var otherPun = collision.gameObject.GetComponent<MonoBehaviourPun>();
         var otherPlayer = collision.gameObject.GetComponent<PlayerCharacter>();
+        var otherView = otherPun?.photonView;
         var otherOwner = otherPun?.photonView.Owner;
         var him = (otherOwner != null) ? otherOwner.NickName : gameObject.name;
         Debug.Log("Colloded object :" + me + ", collider : " + him);
@@ -204,11 +214,16 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
         var contact = collision.contacts[0];
         var impluseStrength = attackPower;
 
-        if (otherPlayer && otherOwner != null)
+        if (/*otherPlayer &&*/ otherOwner != null)
         {
             Debug.Log("Sent RPC_OnCollidedEventFromOtherPlayer", this);
-            photonView.RPC("RPC_OnCollidedEventFromOtherPlayer", otherOwner, impluseStrength, contact.normal * -1.0f, contact.point);
-            photonView.RPC("RPC_OnCollidedEventFromOtherPlayer", photonView.Owner, impluseStrength, contact.normal, contact.point);
+            otherView.RPC("RPC_OnCollidedEventFromOtherPlayer", otherOwner, impluseStrength, contact.normal * -1.0f, contact.point);
+
+            //Player相手の場合は自分にも反動を与える
+            if (otherPlayer)
+            {
+                photonView.RPC("RPC_OnCollidedEventFromOtherPlayer", photonView.Owner, impluseStrength, contact.normal, contact.point);
+            }
         }
         else
         {
