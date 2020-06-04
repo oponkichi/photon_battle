@@ -6,15 +6,54 @@ using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 {
+    struct CollisionInfo
+    {
+        public float impluseStrength;
+        public Vector3 impluseDirection;
+        public Vector3 implusePos;
+
+        public CollisionInfo(float impluseStrength, Vector3 impluseDirection, Vector3 implusePos)
+        {
+            this.impluseStrength = impluseStrength;
+            this.impluseDirection = impluseDirection;
+            this.implusePos = implusePos;
+        }
+    }
+
     [SerializeField]
     float speed = 5.0f;
 
     [SerializeField]
-    GameObject statuUIPrbfab;
+    GameObject statuUIPrbfab = null;
 
     Rigidbody mRigidbody;
     PlayerCamera mCamera;
     UIPlayerStatus mStatusUI;
+    List<CollisionInfo> mCollisionInfos = new List<CollisionInfo>();
+
+    enum Button
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    }
+
+    bool IsButtonDOwn(Button btn)
+    {
+        switch (btn)
+        {
+            case Button.UP:
+                return Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W);
+            case Button.DOWN:
+                return Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S);
+            case Button.LEFT:
+                return Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A);
+            case Button.RIGHT:
+                return Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D);
+        }
+        return false;
+    }
 
 
     bool IsMine()
@@ -53,19 +92,19 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
         }
 
         Vector3 accel = new Vector3();
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (IsButtonDOwn(Button.UP))
         {
             accel.z += 1.0f;
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (IsButtonDOwn(Button.DOWN))
         {
             accel.z -= 1.0f;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (IsButtonDOwn(Button.LEFT))
         {
             accel.x -= 1.0f;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (IsButtonDOwn(Button.RIGHT))
         {
             accel.x += 1.0f;
         }
@@ -92,6 +131,21 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
             mRigidbody.AddForceAtPosition(info.impluseDirection * info.impluseStrength, info.implusePos);
         }
         mCollisionInfos.Clear();
+
+
+        if(transform.position.y < -50.0f)
+        {
+            InGameManager.instance.ExitGame();
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if(mStatusUI)
+        {
+            GameObject.Destroy(mStatusUI.gameObject);
+        }
     }
 
 
@@ -141,21 +195,6 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
-    struct CollisionInfo
-    {
-        public float impluseStrength;
-        public Vector3 impluseDirection;
-        public Vector3 implusePos;
-
-        public CollisionInfo(float impluseStrength, Vector3 impluseDirection, Vector3 implusePos)
-        {
-            this.impluseStrength = impluseStrength;
-            this.impluseDirection = impluseDirection;
-            this.implusePos = implusePos;
-        }
-    }
-    List<CollisionInfo> mCollisionInfos = new List<CollisionInfo>();
 
 
     [PunRPC]

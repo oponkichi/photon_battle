@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InGameManager : MonoBehaviourPunCallbacks
 {
@@ -45,4 +46,17 @@ public class InGameManager : MonoBehaviourPunCallbacks
     {
         
     }
+
+
+    public void ExitGame()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        SceneManager.LoadScene("Menu");
+    }
+
 }
