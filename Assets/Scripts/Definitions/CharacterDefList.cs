@@ -6,6 +6,7 @@ using UnityEngine;
 public class CharacterDef
 {
     public string displayName;
+    public string description;
     public Texture thumbnail;
     public GameObject prefab;
 }

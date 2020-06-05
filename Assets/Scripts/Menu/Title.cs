@@ -22,6 +22,10 @@ namespace PunBattle
         ScrollRect svCharacterSelect;
         [SerializeField]
         GameObject characterIconPrefab;
+        [SerializeField]
+        Text txtCurrentChrName;
+        [SerializeField]
+        Text txtCurrentChrDesc;
 
         List<UICharacterSelectItem> mCharacterIcons = new List<UICharacterSelectItem>();
 
@@ -111,6 +115,10 @@ namespace PunBattle
                 {
                     GameInstance.instance.setectedCharacter = icon.characterDef;
                     var chrIdx = mCharacterIcons.FindIndex(a => a == chrIcon);
+
+                    txtCurrentChrName.text = icon.characterDef.displayName;
+                    txtCurrentChrDesc.text = icon.characterDef.description;
+
                     PlayerPrefs.SetInt(KeySelectedCharacterIndex, chrIdx);
                 }
 

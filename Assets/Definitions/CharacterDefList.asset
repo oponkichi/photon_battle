@@ -14,18 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterDefs:
   - displayName: Soccer Ball
+    description: "\u6A19\u6E96\u7684\u306A\u30DC\u30FC\u30EB"
     thumbnail: {fileID: 2800000, guid: c4ed74b8af0eada49b70c7ccc7a11b58, type: 3}
     prefab: {fileID: 8667813238066851680, guid: 3700e73344fa172469a5af4441012d53,
       type: 3}
   - displayName: Backet Ball
+    description: "\u5927\u304D\u304F\u91CD\u3044\u304C\u3001\u9045\u3044"
     thumbnail: {fileID: 2800000, guid: bcc6a1e7c093be64398cc1cb46aa04da, type: 3}
     prefab: {fileID: 3282782867052314739, guid: 02e5bf8ce7456844b8469194a1016417,
       type: 3}
   - displayName: Golf Ball
+    description: "\u5C0F\u3055\u304F\u3066\u5C0F\u56DE\u308A\u304C\u5229\u304F\u304C\u3001\u8EFD\u3044"
     thumbnail: {fileID: 2800000, guid: c1c6ffc1c6fa66b4b978156f1694e2bd, type: 3}
     prefab: {fileID: 5217367427300785204, guid: 181f8668d96d70247b27776a6f3dfa7f,
       type: 3}
   - displayName: Tennis Ball
+    description: "\u3088\u304F\u8DF3\u306D\u308B"
     thumbnail: {fileID: 2800000, guid: 0831fbe9479e8494cb298be3dca68576, type: 3}
     prefab: {fileID: 1051000217426047172, guid: 6e8710a4be5c4f14aa322fced2856823,
       type: 3}
