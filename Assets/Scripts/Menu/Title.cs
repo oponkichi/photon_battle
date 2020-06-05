@@ -41,10 +41,12 @@ namespace PunBattle
 
             SetupCharacterSelector();
 
-            var chrIdx =PlayerPrefs.GetInt(KeySelectedCharacterIndex);
+            var chrIdx = Mathf.Min( PlayerPrefs.GetInt(KeySelectedCharacterIndex), mCharacterIcons.Count - 1);
             //var icon = FindIconByDef(GameInstance.instance.setectedCharacter);
 
-            OnCharacterSelected(mCharacterIcons[chrIdx < mCharacterIcons.Count ? chrIdx : 0]);
+            OnCharacterSelected(mCharacterIcons[chrIdx]);
+
+            svCharacterSelect.horizontalNormalizedPosition = (float)chrIdx / (mCharacterIcons.Count - 1);
         }
 
         // Update is called once per frame
