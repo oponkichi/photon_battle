@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51884d9039db9404d83b8c87a35920cc, type: 3}
+  m_Name: CharacterDefList
+  m_EditorClassIdentifier: 
+  characterDefs:
+  - displayName: Soccer Ball
+    thumbnail: {fileID: 2800000, guid: c4ed74b8af0eada49b70c7ccc7a11b58, type: 3}
+    prefab: {fileID: 8667813238066851680, guid: 3700e73344fa172469a5af4441012d53,
+      type: 3}
+  - displayName: Backet Ball
+    thumbnail: {fileID: 2800000, guid: bcc6a1e7c093be64398cc1cb46aa04da, type: 3}
+    prefab: {fileID: 3282782867052314739, guid: 02e5bf8ce7456844b8469194a1016417,
+      type: 3}
+  - displayName: Golf Ball
+    thumbnail: {fileID: 2800000, guid: c1c6ffc1c6fa66b4b978156f1694e2bd, type: 3}
+    prefab: {fileID: 5217367427300785204, guid: 181f8668d96d70247b27776a6f3dfa7f,
+      type: 3}
+  - displayName: Tennis Ball
+    thumbnail: {fileID: 2800000, guid: 0831fbe9479e8494cb298be3dca68576, type: 3}
+    prefab: {fileID: 1051000217426047172, guid: 6e8710a4be5c4f14aa322fced2856823,
+      type: 3}
