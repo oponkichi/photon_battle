@@ -35,7 +35,17 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
     UIPlayerStatus mStatusUI;
     List<CollisionInfo> mCollisionInfos = new List<CollisionInfo>();
 
+    #region Replicated fields
+
     float mElapsedTimeFromSpawn = 0.0f;
+
+
+
+    #endregion Replicated fields
+
+    float mStaminna;
+    float mMaxStamina;
+
 
     public float ElapsedTimeFromSpawn => mElapsedTimeFromSpawn;
 
@@ -155,18 +165,21 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
             mRigidbody.AddForce(accel2 * Time.deltaTime, ForceMode.Acceleration);
         }
-#endregion
+        #endregion
 
-# region 他プレイヤーとの衝突の処理
-        foreach (var info in mCollisionInfos)
+        #region 他プレイヤーとの衝突の処理
+        if (mElapsedTimeFromSpawn >= 1.0f)
         {
-            mRigidbody.AddForceAtPosition(info.impluseDirection * info.impluseStrength, info.implusePos);
+            foreach (var info in mCollisionInfos)
+            {
+                mRigidbody.AddForceAtPosition(info.impluseDirection * info.impluseStrength, info.implusePos);
+            }
         }
         mCollisionInfos.Clear();
-#endregion
+        #endregion
 
         //落ちたら死ぬ
-        if(transform.position.y < -50.0f)
+        if (transform.position.y < -50.0f)
         {
             InGameManager.instance.ExitGame();
             gameObject.SetActive(false);
@@ -196,6 +209,12 @@ public class PlayerCharacter : MonoBehaviourPun, IPunObservable
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(mElapsedTimeFromSpawn < 1.0f)
+        {
+            return;
+        }
+
+
         var me = (photonView.Owner != null) ? photonView.Owner.NickName : gameObject.name;
 
         var otherPun = collision.gameObject.GetComponent<MonoBehaviourPun>();

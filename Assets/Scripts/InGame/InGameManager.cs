@@ -30,7 +30,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        InstantiateObject(playerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        InstantiateObject(playerPrefab, new Vector3(0, 3.0f, 0), Quaternion.identity);
     }
 
     // Update is called once per frame
